@@ -11,6 +11,7 @@ convert_one () {
   slug="$2"
   ext="${src##*.}"
   if [ "$ext" = "HEIC" ] || [ "$ext" = "heic" ]; then
+    mkdir -p "$TMP"
     if [ ! -f "$TMP/$(basename "$src" .HEIC).jpg" ]; then
       ffmpeg -y -i "img/$src" -update 1 -frames:v 1 -q:v 2 "$TMP/$(basename "$src" .HEIC).jpg" -loglevel error
     fi
@@ -18,27 +19,30 @@ convert_one () {
   else
     input="img/$src"
   fi
-  ffmpeg -y -i "$input" -vf "scale='min(1920,iw)':-2" -q:v 4 "public/media/img/${slug}.webp" -loglevel error
-  ffmpeg -y -i "$input" -vf "scale='min(700,iw)':-2" -q:v 5 "public/media/img/${slug}-thumb.webp" -loglevel error
+  # NOTE: ffmpeg's -q:v maps directly to libwebp's 0-100 quality scale (not the
+  # 1-31 mjpeg qscale you'd expect) -- keep this high or images come out mush.
+  ffmpeg -y -i "$input" -vf "scale='min(1920,iw)':-2" -q:v 85 "public/media/img/${slug}.webp" -loglevel error
   echo "done: $slug"
 }
 
-convert_one "IMG_5109 - Copy.HEIC" "kitchen-navy-01"
-convert_one "VAFL8071.JPG" "kitchen-navy-02"
-convert_one "IMG_5572.HEIC" "living-fireplace-01"
-convert_one "IMG_5574.HEIC" "living-fireplace-02"
-convert_one "IMG_1347.HEIC" "herringbone-dining"
-convert_one "IMG_5168.HEIC" "builtin-greatroom-01"
-convert_one "IMG_5170.HEIC" "builtin-greatroom-02"
-convert_one "IMG_5568.HEIC" "bay-window-room"
-convert_one "IMG_0185.HEIC" "venue-hall-01"
-convert_one "IMG_0186.HEIC" "venue-hall-02"
-convert_one "IMG_0134.HEIC" "floor-detail-mahogany"
-convert_one "IMG_4550.HEIC" "stairs-before-wide"
-convert_one "IMG_4552.HEIC" "stairs-before-detail"
-convert_one "IMG_4573.HEIC" "stairs-after-wide"
-convert_one "IMG_4581.HEIC" "stairs-after-detail"
-convert_one "IMG_0150.HEIC" "venue-finishing"
-convert_one "IMG_0151.HEIC" "sealer-product"
+# gallery
+convert_one "kitchen-navy-island.jpg" "kitchen-navy"
+convert_one "herringbone-dining-a.jpg" "herringbone-dining"
+convert_one "venue-hall-wedding-a.jpg" "venue-hall-wedding"
+convert_one "venue-hall-wide.jpg" "venue-hall-wide"
+convert_one "venue-hall-lighting.jpg" "venue-hall-lighting"
+convert_one "floor-install-oak.jpg" "floor-install-oak"
+convert_one "floor-detail-macro.jpg" "floor-detail-mahogany"
+convert_one "stairs-after-detail-b.jpg" "stairs-after-closeup"
+convert_one "sealer-traffichd.jpg" "sealer-product"
+convert_one "stairs-hallway-after.jpg" "stairs-hallway-after"
+convert_one "full-staircase.jpeg" "full-staircase"
+
+# before / after pairs
+# same newel post, same TV/cabinet/coin-jar landmarks visible in both shots
+convert_one "stairs-before-a.jpg" "stairs-before-wide"
+convert_one "stairs-after-detail-a.jpg" "stairs-after-wide"
+convert_one "stairs-before-detail-b.jpg" "stairs-before-detail"
+convert_one "stairs-hallway-after.jpg" "stairs-after-detail"
 
 echo "All images converted."

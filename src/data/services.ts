@@ -16,33 +16,12 @@ export const services: Service[] = [
     span: "large",
   },
   {
-    id: "engineered-hardwood",
-    name: "Engineered Hardwood",
-    description:
-      "Stable, dimensionally sound flooring built to perform over radiant heat, concrete, and below-grade spaces.",
-    span: "normal",
-  },
-  {
     id: "installation",
     name: "Flooring Installation",
     description:
       "Precise, professional installation with careful attention to subfloor prep and detail.",
-    image: "/media/img/builtin-greatroom-01.webp",
+    image: "/media/img/floor-install-oak.webp",
     span: "wide",
-  },
-  {
-    id: "vinyl-flooring",
-    name: "Vinyl Flooring",
-    description:
-      "Durable, water-resistant vinyl systems suited to high-traffic residential and commercial spaces.",
-    span: "normal",
-  },
-  {
-    id: "lvt",
-    name: "LVT / Luxury Vinyl Tile",
-    description:
-      "Realistic wood-look tile flooring engineered for durability, comfort, and low maintenance.",
-    span: "normal",
   },
   {
     id: "dust-free-sanding",
@@ -57,14 +36,7 @@ export const services: Service[] = [
     name: "Hardwood Refinishing",
     description:
       "Full refinishing that restores worn, scratched, or dated hardwood to its original character.",
-    image: "/media/img/living-fireplace-02.webp",
-    span: "normal",
-  },
-  {
-    id: "repairs",
-    name: "Flooring Repairs",
-    description:
-      "Board replacement, structural repair, and finish correction that preserves the existing floor.",
+    image: "/media/img/stairs-after-wide.webp",
     span: "normal",
   },
   {

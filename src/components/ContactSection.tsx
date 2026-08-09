@@ -1,4 +1,5 @@
 import { ContactForm } from "./ContactForm";
+import { Logo } from "./Logo";
 import { site } from "../data/site";
 
 export function ContactSection() {
@@ -17,6 +18,9 @@ export function ContactSection() {
         </div>
 
         <div className="mx-auto mt-12 max-w-3xl border border-line-dark bg-paper p-6 shadow-2xl sm:p-10 md:p-12">
+          <div className="mb-8 flex justify-center">
+            <Logo size="lg" tone="dark" />
+          </div>
           <ContactForm />
         </div>
 

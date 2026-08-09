@@ -12,8 +12,8 @@ export function Hero() {
     <section id="top" className="relative flex min-h-[100svh] items-end overflow-hidden bg-ink">
       <div className="absolute inset-0">
         <img
-          src="/media/img/living-fireplace-01.webp"
-          alt="Refinished hardwood floor in a living room with a fireplace and French doors"
+          src="/media/img/venue-hall-wedding.webp"
+          alt="Large event hall with rich hardwood flooring, wine barrels, and floral arches"
           className="h-full w-full object-cover"
           loading="eager"
           decoding="async"
@@ -33,9 +33,9 @@ export function Hero() {
             className="animate-fade-up font-display text-[2.75rem] font-extrabold leading-[0.98] tracking-tight text-ivory sm:text-6xl lg:text-[5.25rem]"
             style={{ animationDelay: "80ms" }}
           >
-            Beautiful floors.
+            Floors built right.
             <br />
-            Built to last.
+            Made to last.
           </h1>
 
           <p

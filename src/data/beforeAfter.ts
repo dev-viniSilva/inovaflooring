@@ -15,24 +15,24 @@ export const beforeAfterPairs: BeforeAfterPair[] = [
     service: "Refinishing",
     before: {
       src: img("stairs-before-wide"),
-      alt: "Worn oak stair treads with carpeted upper flight before refinishing",
+      alt: "Staircase newel post with carpeted upper treads and a bare, unfinished handrail before refinishing",
     },
     after: {
-      src: img("stairs-after-wide"),
-      alt: "Same staircase after refinishing, with rich stained treads and painted risers",
+      src: img("stairs-after-closeup"),
+      alt: "Same staircase newel post after refinishing, with a glossy black handrail and rich stained treads",
     },
   },
   {
     id: "staircase-02",
-    title: "Staircase Railing & Treads",
+    title: "Staircase Detail",
     service: "Refinishing",
     before: {
       src: img("stairs-before-detail"),
-      alt: "Staircase railing and worn treads before restoration",
+      alt: "Close-up of worn staircase treads with a dull, faded finish before restoration",
     },
     after: {
       src: img("stairs-after-detail"),
-      alt: "Staircase railing and treads after restoration, with dark handrail and stained wood",
+      alt: "Refinished staircase with glossy stained treads and a black handrail after restoration",
     },
   },
 ];

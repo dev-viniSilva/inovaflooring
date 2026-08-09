@@ -135,6 +135,20 @@ export function Navigation() {
             >
               {site.phoneDisplay}
             </a>
+            <a
+              href={site.instagram}
+              target="_blank"
+              rel="noreferrer noopener"
+              onClick={() => setOpen(false)}
+              className="flex w-full items-center justify-center gap-3 border border-line py-3.5 text-[13px] font-bold uppercase tracking-[0.12em] text-charcoal-soft transition-colors hover:border-charcoal hover:text-charcoal"
+            >
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                <rect x="3" y="3" width="18" height="18" rx="5.5" stroke="currentColor" strokeWidth="1.6" />
+                <circle cx="12" cy="12" r="4.4" stroke="currentColor" strokeWidth="1.6" />
+                <circle cx="17.4" cy="6.6" r="1.2" fill="currentColor" />
+              </svg>
+              {site.instagramHandle}
+            </a>
           </div>
         </div>
       </div>

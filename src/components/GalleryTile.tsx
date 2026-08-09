@@ -14,7 +14,7 @@ interface GalleryTileProps {
 }
 
 export function GalleryTile({ item, onOpen }: GalleryTileProps) {
-  const thumbSrc = item.type === "image" ? item.thumb : item.poster;
+  const tileSrc = item.type === "image" ? item.src : item.poster;
 
   return (
     <button
@@ -24,7 +24,7 @@ export function GalleryTile({ item, onOpen }: GalleryTileProps) {
       aria-label={`Open ${item.label} project photo: ${item.alt}`}
     >
       <img
-        src={thumbSrc}
+        src={tileSrc}
         alt={item.alt}
         loading="lazy"
         decoding="async"
@@ -40,6 +40,18 @@ export function GalleryTile({ item, onOpen }: GalleryTileProps) {
           </svg>
         </span>
       )}
+
+      <span className="pointer-events-none absolute right-3 top-3 flex h-8 w-8 items-center justify-center rounded-full bg-[#201c18b3] text-ivory opacity-80 transition-opacity duration-300 group-hover:opacity-100">
+        <svg width="13" height="13" viewBox="0 0 16 16" fill="none" aria-hidden="true">
+          <path
+            d="M6 2H2v4M10 2h4v4M6 14H2v-4M10 14h4v-4"
+            stroke="currentColor"
+            strokeWidth="1.4"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+          />
+        </svg>
+      </span>
 
       <span className="pointer-events-none absolute bottom-3 left-3 translate-y-1 bg-[#f6f2eaf2] px-2.5 py-1 text-[10px] font-bold uppercase tracking-[0.14em] text-charcoal opacity-0 transition-all duration-300 group-hover:translate-y-0 group-hover:opacity-100">
         {item.label}

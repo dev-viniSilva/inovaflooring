@@ -1,5 +1,6 @@
 import { useEffect, useRef } from "react";
 import type { GalleryItem } from "../data/gallery";
+import { LightboxVideo } from "./LightboxVideo";
 
 interface LightboxProps {
   items: GalleryItem[];
@@ -77,14 +78,25 @@ export function Lightbox({ items, index, onClose, onNavigate }: LightboxProps) {
           type="button"
           onClick={goPrev}
           aria-label="Previous project photo"
-          className="absolute left-2 top-1/2 hidden h-11 w-11 -translate-y-1/2 items-center justify-center text-ivory transition-colors hover:text-clay sm:flex md:left-4"
+          className="absolute left-2 top-1/2 z-10 flex h-12 w-12 -translate-y-1/2 items-center justify-center rounded-full bg-[#f6f2ea26] text-ivory backdrop-blur-sm transition-colors hover:bg-[#f6f2ea40] hover:text-clay active:scale-90 sm:h-14 sm:w-14 md:left-4"
         >
-          <svg width="22" height="22" viewBox="0 0 16 16" fill="none" aria-hidden="true">
+          <svg width="26" height="26" viewBox="0 0 16 16" fill="none" aria-hidden="true">
             <path d="M10 2 4 8l6 6" stroke="currentColor" strokeWidth="1.4" strokeLinecap="round" strokeLinejoin="round" />
           </svg>
         </button>
 
-        <div className="flex max-h-full max-w-4xl flex-col items-center">
+        <div className="relative flex max-h-full max-w-4xl flex-col items-center">
+          <div className="absolute left-1/2 top-0 z-20 flex h-12 w-12 -translate-x-1/2 -translate-y-1/2 items-center justify-center rounded-full border border-[#f6f2ea33] bg-ink shadow-lg sm:h-14 sm:w-14">
+            <img
+              src="/media/img/logo-icon.png"
+              alt="InovaFlooring"
+              width={28}
+              height={28}
+              className="h-7 w-7 select-none sm:h-8 sm:w-8"
+              draggable={false}
+            />
+          </div>
+
           {item.type === "image" ? (
             <img
               src={item.src}
@@ -92,16 +104,11 @@ export function Lightbox({ items, index, onClose, onNavigate }: LightboxProps) {
               className="max-h-[70svh] w-auto object-contain"
             />
           ) : (
-            <video
+            <LightboxVideo
               key={item.id}
               src={item.src}
               poster={item.poster}
-              controls
-              autoPlay
-              muted
-              loop
-              playsInline
-              className="max-h-[70svh] w-auto object-contain"
+              alt={item.alt}
             />
           )}
           <p className="mt-4 max-w-lg text-center text-sm text-[#f6f2eab3]">{item.alt}</p>
@@ -111,20 +118,11 @@ export function Lightbox({ items, index, onClose, onNavigate }: LightboxProps) {
           type="button"
           onClick={goNext}
           aria-label="Next project photo"
-          className="absolute right-2 top-1/2 hidden h-11 w-11 -translate-y-1/2 items-center justify-center text-ivory transition-colors hover:text-clay sm:flex md:right-4"
+          className="absolute right-2 top-1/2 z-10 flex h-12 w-12 -translate-y-1/2 items-center justify-center rounded-full bg-[#f6f2ea26] text-ivory backdrop-blur-sm transition-colors hover:bg-[#f6f2ea40] hover:text-clay active:scale-90 sm:h-14 sm:w-14 md:right-4"
         >
-          <svg width="22" height="22" viewBox="0 0 16 16" fill="none" aria-hidden="true">
+          <svg width="26" height="26" viewBox="0 0 16 16" fill="none" aria-hidden="true">
             <path d="M6 2l6 6-6 6" stroke="currentColor" strokeWidth="1.4" strokeLinecap="round" strokeLinejoin="round" />
           </svg>
-        </button>
-      </div>
-
-      <div className="flex justify-center gap-4 pb-6 sm:hidden">
-        <button type="button" onClick={goPrev} aria-label="Previous" className="px-4 py-2 text-ivory">
-          Prev
-        </button>
-        <button type="button" onClick={goNext} aria-label="Next" className="px-4 py-2 text-ivory">
-          Next
         </button>
       </div>
     </div>

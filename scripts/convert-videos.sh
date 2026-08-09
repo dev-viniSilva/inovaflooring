@@ -16,12 +16,11 @@ convert_clip () {
   echo "done: $slug"
 }
 
-convert_clip "hero-reveal"      "IMG_1342.MOV" 2   10 800
-convert_clip "dustfree-sanding" "IMG_0123.MOV" 12  12 800
-convert_clip "drum-sanding"     "IMG_5555.MOV" 2   12 800
-convert_clip "room-pan-01"      "IMG_5166.MOV" 3   10 640
-convert_clip "room-pan-02"      "IMG_5167.MOV" 1   12 640
-convert_clip "bedroom-nook"     "IMG_5504.MOV" 5   10 640
-convert_clip "amber-room"       "IMG_5575.MOV" 0.5 10 640
+convert_clip "dustfree-sanding"    "dustfree-sanding-a.mp4"     1   10 800
+convert_clip "drum-sanding"        "drum-sanding-a.mp4"         5   12 800
+convert_clip "room-pan-01"         "room-pan-empty.mp4"         0   6  640
+convert_clip "room-pan-02"         "room-pan-beachview.mp4"     3   10 640
+convert_clip "bedroom-nook"        "bedroom-fan.mp4"            3   10 640
+convert_clip "living-fireplace-pan" "living-fireplace-pan-b.mp4" 3   10 640
 
 echo "All videos converted."

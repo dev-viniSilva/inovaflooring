@@ -1,47 +1,28 @@
 import { services, type Service } from "../data/services";
 
-const spanClasses: Record<Service["span"], string> = {
-  normal: "col-span-1 row-span-1",
-  wide: "col-span-2 row-span-1",
-  tall: "col-span-1 row-span-2",
-  large: "col-span-2 row-span-2",
-};
-
-function ServiceTile({ service }: { service: Service }) {
-  if (service.image) {
-    return (
-      <div className={`group relative overflow-hidden bg-ink ${spanClasses[service.span]}`}>
-        <img
-          src={service.image}
-          alt=""
-          aria-hidden="true"
-          loading="lazy"
-          decoding="async"
-          className="h-full w-full object-cover transition-transform duration-700 ease-out group-hover:scale-[1.05]"
-        />
-        <div className="absolute inset-0 bg-gradient-to-t from-ink via-[#131110a6] to-[#1311101a]" />
-        <div className="absolute inset-x-0 bottom-0 p-5 sm:p-6">
-          <h3 className="font-display text-lg font-bold leading-tight text-ivory sm:text-xl">
-            {service.name}
-          </h3>
-          <p className="mt-2 max-w-xs text-[13px] leading-relaxed text-[#f6f2eab3] opacity-0 transition-opacity duration-300 group-hover:opacity-100 sm:text-sm">
-            {service.description}
-          </p>
-        </div>
-      </div>
-    );
-  }
-
+function ServiceCard({ service }: { service: Service }) {
   return (
-    <div
-      className={`texture-lines group relative flex flex-col justify-between overflow-hidden bg-charcoal p-5 transition-colors duration-300 hover:bg-[#241f1a] sm:p-6 ${spanClasses[service.span]}`}
-    >
-      <span className="h-px w-8 bg-clay" aria-hidden="true" />
-      <div>
-        <h3 className="font-display text-lg font-bold leading-tight text-ivory sm:text-xl">
+    <div className="group flex flex-col border border-line bg-ivory transition-shadow duration-300 hover:shadow-lg">
+      {service.image ? (
+        <div className="aspect-[4/3] w-full overflow-hidden bg-ink">
+          <img
+            src={service.image}
+            alt=""
+            aria-hidden="true"
+            loading="lazy"
+            decoding="async"
+            className="h-full w-full object-cover object-center transition-transform duration-700 ease-out group-hover:scale-[1.05]"
+          />
+        </div>
+      ) : (
+        <div className="texture-lines aspect-[4/3] w-full bg-charcoal" aria-hidden="true" />
+      )}
+
+      <div className="flex flex-1 flex-col p-5 sm:p-6">
+        <h3 className="font-display text-base font-bold leading-tight text-charcoal sm:text-lg">
           {service.name}
         </h3>
-        <p className="mt-2 max-w-xs text-[13px] leading-relaxed text-[#f6f2eab3] sm:text-sm">
+        <p className="mt-2 text-[13px] leading-relaxed text-charcoal-soft">
           {service.description}
         </p>
       </div>
@@ -66,9 +47,9 @@ export function Services() {
           </p>
         </div>
 
-        <div className="grid grid-cols-2 gap-2 [grid-auto-rows:200px] sm:gap-3 md:grid-cols-4 md:[grid-auto-rows:240px]">
+        <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 sm:gap-4 lg:grid-cols-5 [&>*:last-child]:col-span-2 sm:[&>*:last-child]:col-span-1">
           {services.map((service) => (
-            <ServiceTile key={service.id} service={service} />
+            <ServiceCard key={service.id} service={service} />
           ))}
         </div>
       </div>
