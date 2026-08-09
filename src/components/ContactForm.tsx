@@ -25,13 +25,12 @@ const initialValues: FormValues = {
 };
 
 const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+const FORMSPREE_ENDPOINT = "https://formspree.io/f/mnpappgk";
 
 export function ContactForm() {
   const [values, setValues] = useState<FormValues>(initialValues);
   const [errors, setErrors] = useState<Partial<Record<keyof FormValues, string>>>({});
   const [status, setStatus] = useState<Status>("idle");
-
-  const endpoint = import.meta.env.VITE_FORMSPREE_ENDPOINT;
 
   const setField = (field: keyof FormValues) => (
     e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>
@@ -57,14 +56,9 @@ export function ContactForm() {
     e.preventDefault();
     if (!validate()) return;
 
-    if (!endpoint) {
-      setStatus("error");
-      return;
-    }
-
     setStatus("submitting");
     try {
-      const res = await fetch(endpoint, {
+      const res = await fetch(FORMSPREE_ENDPOINT, {
         method: "POST",
         headers: { Accept: "application/json", "Content-Type": "application/json" },
         body: JSON.stringify(values),
@@ -224,9 +218,7 @@ export function ContactForm() {
       {status === "error" && (
         <div className="sm:col-span-2">
           <p className="text-[13px] text-clay" role="alert">
-            {endpoint
-              ? "Something went wrong sending your request. Please try again, or call us directly."
-              : "The contact form isn't fully configured yet. Please call or email us directly."}{" "}
+            Something went wrong sending your request. Please try again, or call us directly.{" "}
             <a href={site.phoneHref} className="underline underline-offset-2">
               {site.phoneDisplay}
             </a>
