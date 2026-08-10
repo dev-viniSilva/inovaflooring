@@ -9,7 +9,8 @@ mkdir -p public/media/video
 convert_clip () {
   slug="$1"; src="$2"; start="$3"; dur="$4"; w="$5"
   ffmpeg -y -ss "$start" -i "img/$src" -t "$dur" \
-    -vf "scale=${w}:-2,fps=30" -an -c:v libx264 -preset slow -crf 23 -pix_fmt yuv420p \
+    -vf "scale=${w}:-2,fps=30" -c:v libx264 -preset slow -crf 23 -pix_fmt yuv420p \
+    -c:a aac -b:a 128k -ac 2 \
     -movflags +faststart "public/media/video/${slug}.mp4" -loglevel error
   ffmpeg -y -i "public/media/video/${slug}.mp4" -vf "select=eq(n\,5)" -frames:v 1 -q:v 4 \
     "public/media/img/${slug}-poster.jpg" -loglevel error

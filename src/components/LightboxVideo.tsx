@@ -1,4 +1,4 @@
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 
 interface LightboxVideoProps {
   src: string;
@@ -20,14 +20,38 @@ export function LightboxVideo({ src, poster, alt, className = "" }: LightboxVide
   const videoRef = useRef<HTMLVideoElement>(null);
   const barRef = useRef<HTMLDivElement>(null);
   const [playing, setPlaying] = useState(true);
+  const [muted, setMuted] = useState(false);
   const [currentTime, setCurrentTime] = useState(0);
   const [duration, setDuration] = useState(0);
+
+  useEffect(() => {
+    const v = videoRef.current;
+    if (!v) return;
+    v.muted = false;
+    const playAttempt = v.play();
+    if (playAttempt && typeof playAttempt.catch === "function") {
+      playAttempt.catch(() => {
+        // Autoplay with sound was blocked -- fall back to a muted start so
+        // playback still begins; the user can unmute from the control bar.
+        v.muted = true;
+        setMuted(true);
+        v.play().catch(() => {});
+      });
+    }
+  }, []);
 
   const togglePlay = () => {
     const v = videoRef.current;
     if (!v) return;
     if (v.paused) v.play();
     else v.pause();
+  };
+
+  const toggleMute = () => {
+    const v = videoRef.current;
+    if (!v) return;
+    v.muted = !v.muted;
+    setMuted(v.muted);
   };
 
   const seekFromClientX = (clientX: number) => {
@@ -48,8 +72,6 @@ export function LightboxVideo({ src, poster, alt, className = "" }: LightboxVide
         src={src}
         poster={poster}
         aria-label={alt}
-        autoPlay
-        muted
         loop
         playsInline
         onPlay={() => setPlaying(true)}
@@ -97,6 +119,26 @@ export function LightboxVideo({ src, poster, alt, className = "" }: LightboxVide
         <span className="shrink-0 text-[11px] font-bold tabular-nums text-ivory">
           {formatTime(currentTime)} / {formatTime(duration)}
         </span>
+
+        <button
+          type="button"
+          onClick={toggleMute}
+          aria-label={muted ? "Unmute video" : "Mute video"}
+          className="flex h-8 w-8 shrink-0 items-center justify-center text-ivory transition-colors hover:text-clay"
+        >
+          {muted ? (
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+              <path d="M4 10v4h3l4 4V6l-4 4H4Z" fill="currentColor" />
+              <path d="M15.5 9.5l4 4M19.5 9.5l-4 4" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" />
+            </svg>
+          ) : (
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+              <path d="M4 10v4h3l4 4V6l-4 4H4Z" fill="currentColor" />
+              <path d="M15.5 9a3.5 3.5 0 0 1 0 6" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" />
+              <path d="M18 6.5a7 7 0 0 1 0 11" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" />
+            </svg>
+          )}
+        </button>
       </div>
     </div>
   );

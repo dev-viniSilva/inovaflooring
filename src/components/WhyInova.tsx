@@ -44,7 +44,7 @@ export function WhyInova() {
               Dust-Free Sanding
             </span>
           </div>
-          <div className="relative mt-8 aspect-[3/4] overflow-hidden bg-charcoal">
+          <div className="relative mt-14 aspect-[3/4] overflow-hidden bg-charcoal">
             <AmbientVideo
               src="/media/video/drum-sanding.mp4"
               poster="/media/img/drum-sanding-poster.jpg"

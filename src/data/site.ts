@@ -6,6 +6,7 @@ export const site = {
   emailHref: "mailto:info@inovaflooring.com",
   instagram: "https://www.instagram.com/inovaflooring/",
   instagramHandle: "@inovaflooring",
+  googleReview: "https://share.google/YmF8YdBqb7f3Q3KKg",
   hoursLine: "Open Daily",
   hoursDetail: "6:00 AM – 9:00 PM",
   areas: ["NJ", "NY", "PA", "MD"],

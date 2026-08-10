@@ -85,7 +85,10 @@ export function Lightbox({ items, index, onClose, onNavigate }: LightboxProps) {
           </svg>
         </button>
 
-        <div className="relative flex max-h-full max-w-4xl flex-col items-center">
+        <div
+          key={item.id}
+          className="relative flex max-h-full max-w-4xl animate-fade-in-fast flex-col items-center"
+        >
           <div className="absolute left-1/2 top-0 z-20 flex h-12 w-12 -translate-x-1/2 -translate-y-1/2 items-center justify-center rounded-full border border-[#f6f2ea33] bg-ink shadow-lg sm:h-14 sm:w-14">
             <img
               src="/media/img/logo-icon.png"
@@ -104,12 +107,7 @@ export function Lightbox({ items, index, onClose, onNavigate }: LightboxProps) {
               className="max-h-[70svh] w-auto object-contain"
             />
           ) : (
-            <LightboxVideo
-              key={item.id}
-              src={item.src}
-              poster={item.poster}
-              alt={item.alt}
-            />
+            <LightboxVideo src={item.src} poster={item.poster} alt={item.alt} />
           )}
           <p className="mt-4 max-w-lg text-center text-sm text-[#f6f2eab3]">{item.alt}</p>
         </div>

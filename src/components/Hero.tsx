@@ -12,8 +12,8 @@ export function Hero() {
     <section id="top" className="relative flex min-h-[100svh] items-end overflow-hidden bg-ink">
       <div className="absolute inset-0">
         <img
-          src="/media/img/venue-hall-wedding.webp"
-          alt="Large event hall with rich hardwood flooring, wine barrels, and floral arches"
+          src="/media/img/venue-hall-wide.webp"
+          alt="Wide view of an event hall with hardwood flooring and exposed brick walls"
           className="h-full w-full object-cover"
           loading="eager"
           decoding="async"

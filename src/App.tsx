@@ -5,6 +5,7 @@ import { ProjectGallery } from "./components/ProjectGallery";
 import { Services } from "./components/Services";
 import { Pricing } from "./components/Pricing";
 import { WhyInova } from "./components/WhyInova";
+import { ReviewCTA } from "./components/ReviewCTA";
 import { Process } from "./components/Process";
 import { ServiceArea } from "./components/ServiceArea";
 import { ContactSection } from "./components/ContactSection";
@@ -30,6 +31,7 @@ function App() {
         <Process />
         <ServiceArea />
         <ContactSection />
+        <ReviewCTA />
       </main>
       <Footer />
     </>
