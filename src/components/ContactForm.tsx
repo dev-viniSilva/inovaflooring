@@ -211,7 +211,7 @@ export function ContactForm() {
 
           <div>
             <label htmlFor="squareFootage" className={labelClasses}>
-              Approximate Square Footage <span className="normal-case text-[#34302bb3]">(optional)</span>
+              Square Footage <span className="normal-case text-[#34302bb3]">(optional)</span>
             </label>
             <input
               id="squareFootage"

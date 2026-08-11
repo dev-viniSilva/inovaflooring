@@ -3,7 +3,7 @@ import { services, type Service } from "../data/services";
 
 function ServiceCard({ service }: { service: Service }) {
   return (
-    <div className="group flex h-full w-[248px] shrink-0 snap-start flex-col border border-line bg-ivory transition-shadow duration-300 hover:shadow-lg sm:w-[280px]">
+    <div className="group flex h-full w-[248px] shrink-0 flex-col border border-line bg-ivory transition-shadow duration-300 hover:shadow-lg sm:w-[280px]">
       {service.image ? (
         <div className="aspect-[4/3] w-full overflow-hidden bg-ink">
           <img
@@ -32,49 +32,74 @@ function ServiceCard({ service }: { service: Service }) {
 }
 
 export function Services() {
-  const scrollRef = useRef<HTMLDivElement>(null);
-  const [atStart, setAtStart] = useState(true);
-  const [atEnd, setAtEnd] = useState(false);
+  const viewportRef = useRef<HTMLDivElement>(null);
+  const trackRef = useRef<HTMLDivElement>(null);
+  const touchStartX = useRef<number | null>(null);
+
+  const [offset, setOffset] = useState(0);
+  const [maxOffset, setMaxOffset] = useState(0);
+  const [step, setStep] = useState(0);
   const [thumb, setThumb] = useState({ widthPct: 100, leftPct: 0 });
 
-  const updateScrollState = () => {
-    const el = scrollRef.current;
-    if (!el) return;
-    const max = el.scrollWidth - el.clientWidth;
-    setAtStart(el.scrollLeft <= 4);
-    setAtEnd(el.scrollLeft >= max - 4);
-    const widthPct = Math.min(100, (el.clientWidth / el.scrollWidth) * 100);
-    const scrollRatio = max > 0 ? el.scrollLeft / max : 0;
-    setThumb({ widthPct, leftPct: scrollRatio * (100 - widthPct) });
+  const measure = () => {
+    const viewport = viewportRef.current;
+    const track = trackRef.current;
+    if (!viewport || !track) return;
+
+    const gap = parseFloat(getComputedStyle(track).columnGap || "16") || 16;
+    const card = track.querySelector<HTMLElement>("[data-card]");
+    const cardWidth = card ? card.getBoundingClientRect().width : viewport.clientWidth * 0.8;
+
+    const newMax = Math.max(0, track.scrollWidth - viewport.clientWidth);
+    setStep(cardWidth + gap);
+    setMaxOffset(newMax);
+    setOffset((o) => Math.min(o, newMax));
   };
 
   useEffect(() => {
-    updateScrollState();
-    const el = scrollRef.current;
-    if (!el) return;
-    el.addEventListener("scroll", updateScrollState, { passive: true });
-    window.addEventListener("resize", updateScrollState);
-    return () => {
-      el.removeEventListener("scroll", updateScrollState);
-      window.removeEventListener("resize", updateScrollState);
-    };
+    const viewport = viewportRef.current;
+    const track = trackRef.current;
+    if (!viewport || !track) return;
+
+    // Measure synchronously right away -- don't rely solely on
+    // ResizeObserver's first callback, since its delivery timing isn't
+    // guaranteed the same way across every browser/rendering context, and
+    // step/maxOffset must never be left at their zero defaults (that would
+    // silently clamp every scroll to a no-op).
+    measure();
+
+    const observer = new ResizeObserver(() => measure());
+    observer.observe(viewport);
+    observer.observe(track);
+    return () => observer.disconnect();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  const scrollByCard = (direction: 1 | -1) => {
-    const el = scrollRef.current;
-    if (!el) return;
-    const card = el.querySelector<HTMLElement>("[data-card]");
-    const amount = card ? card.getBoundingClientRect().width + 16 : el.clientWidth * 0.8;
-    // `behavior: "smooth"` combined with scroll-snap can silently get stuck
-    // in some Chromium versions and never actually move -- "instant" is the
-    // reliable choice here. The CSS scroll-snap + scroll-smooth on the
-    // container still gives touch/trackpad scrolling its natural glide.
-    el.scrollBy({ left: amount * direction, behavior: "instant" });
-    // Don't rely solely on the native "scroll" event to sync the arrow/thumb
-    // state -- it isn't guaranteed to fire synchronously after a
-    // programmatic scroll, so update explicitly right away too.
-    updateScrollState();
+  useEffect(() => {
+    const viewportWidth = viewportRef.current?.clientWidth ?? 0;
+    const trackWidth = trackRef.current?.scrollWidth ?? 0;
+    const widthPct = trackWidth > 0 ? Math.min(100, (viewportWidth / trackWidth) * 100) : 100;
+    const ratio = maxOffset > 0 ? offset / maxOffset : 0;
+    setThumb({ widthPct, leftPct: ratio * (100 - widthPct) });
+  }, [offset, maxOffset]);
+
+  const goTo = (next: number) => setOffset(Math.min(maxOffset, Math.max(0, next)));
+  const goPrev = () => goTo(offset - (step || 1));
+  const goNext = () => goTo(offset + (step || 1));
+
+  const onTouchStart = (e: React.TouchEvent) => {
+    touchStartX.current = e.touches[0].clientX;
   };
+  const onTouchEnd = (e: React.TouchEvent) => {
+    if (touchStartX.current === null) return;
+    const delta = e.changedTouches[0].clientX - touchStartX.current;
+    if (delta > 40) goPrev();
+    else if (delta < -40) goNext();
+    touchStartX.current = null;
+  };
+
+  const atStart = offset <= 0;
+  const atEnd = offset >= maxOffset;
 
   const arrowClasses =
     "flex h-10 w-10 shrink-0 items-center justify-center border border-line text-charcoal transition-colors hover:border-charcoal disabled:cursor-not-allowed disabled:opacity-30 disabled:hover:border-line";
@@ -99,9 +124,9 @@ export function Services() {
             <div className="flex shrink-0 items-center gap-2">
               <button
                 type="button"
-                onClick={() => scrollByCard(-1)}
+                onClick={goPrev}
                 disabled={atStart}
-                aria-label="Scroll services left"
+                aria-label="Previous services"
                 className={arrowClasses}
               >
                 <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true">
@@ -110,9 +135,9 @@ export function Services() {
               </button>
               <button
                 type="button"
-                onClick={() => scrollByCard(1)}
+                onClick={goNext}
                 disabled={atEnd}
-                aria-label="Scroll services right"
+                aria-label="Next services"
                 className={arrowClasses}
               >
                 <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true">
@@ -133,29 +158,24 @@ export function Services() {
               strokeLinejoin="round"
             />
           </svg>
-          Scroll to see all services
+          Swipe or use the arrows to see all services
         </div>
 
-        <div className="relative">
+        <div
+          ref={viewportRef}
+          role="region"
+          aria-label="Services"
+          className="overflow-hidden"
+          onTouchStart={onTouchStart}
+          onTouchEnd={onTouchEnd}
+        >
           <div
-            className={`pointer-events-none absolute inset-y-0 left-0 z-10 w-10 bg-gradient-to-r from-ivory to-transparent transition-opacity duration-300 sm:w-16 ${
-              atStart ? "opacity-0" : "opacity-100"
-            }`}
-            aria-hidden="true"
-          />
-          <div
-            className={`pointer-events-none absolute inset-y-0 right-0 z-10 w-10 bg-gradient-to-l from-ivory to-transparent transition-opacity duration-300 sm:w-16 ${
-              atEnd ? "opacity-0" : "opacity-100"
-            }`}
-            aria-hidden="true"
-          />
-
-          <div
-            ref={scrollRef}
-            role="region"
-            aria-label="Services, scroll horizontally for more"
-            tabIndex={0}
-            className="flex snap-x snap-mandatory gap-3 overflow-x-auto scroll-smooth pb-1 focus:outline-none sm:gap-4 [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
+            ref={trackRef}
+            className="flex gap-3 sm:gap-4"
+            style={{
+              transform: `translateX(-${offset}px)`,
+              transition: "transform 500ms cubic-bezier(0.65, 0, 0.35, 1)",
+            }}
           >
             {services.map((service) => (
               <div key={service.id} data-card>
@@ -167,7 +187,7 @@ export function Services() {
 
         <div className="relative mt-5 h-[3px] w-full max-w-[220px] rounded-full bg-line">
           <div
-            className="absolute inset-y-0 left-0 rounded-full bg-clay transition-[left,width] duration-150 ease-out"
+            className="absolute inset-y-0 left-0 rounded-full bg-clay transition-[left,width] duration-500 ease-[cubic-bezier(0.65,0,0.35,1)]"
             style={{ width: `${thumb.widthPct}%`, left: `${thumb.leftPct}%` }}
           />
         </div>
