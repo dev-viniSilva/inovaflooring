@@ -1,4 +1,4 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://www.inovaflooring.com/sitemap.xml
+Sitemap: https://inovaflooring.com/sitemap.xml
