@@ -1,7 +1,7 @@
 export const site = {
   name: "InovaFlooring",
-  phoneDisplay: "732-533-8124",
-  phoneHref: "tel:+17325338124",
+  phoneDisplay: "732-688-5109",
+  phoneHref: "tel:+17326885109",
   email: "info@inovaflooring.com",
   emailHref: "mailto:info@inovaflooring.com",
   instagram: "https://www.instagram.com/inovaflooring/",
