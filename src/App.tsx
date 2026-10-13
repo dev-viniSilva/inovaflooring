@@ -10,6 +10,7 @@ import { Process } from "./components/Process";
 import { ServiceArea } from "./components/ServiceArea";
 import { ContactSection } from "./components/ContactSection";
 import { Footer } from "./components/Footer";
+import { StickyCTA } from "./components/StickyCTA";
 
 function App() {
   return (
@@ -34,6 +35,8 @@ function App() {
         <ReviewCTA />
       </main>
       <Footer />
+      <div className="h-[72px] bg-charcoal lg:hidden" aria-hidden="true" />
+      <StickyCTA />
     </>
   );
 }
